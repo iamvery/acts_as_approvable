@@ -1,0 +1,8 @@
+acts_as_approvable_plugin.sqlite3.db
+.bundle/
+log/*.log
+pkg/
+test/dummy/db/*.sqlite3
+test/dummy/log/*.log
+test/dummy/tmp/
+test/dummy/db/*
