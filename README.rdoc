@@ -1,3 +1,43 @@
 = ActsAsApprovable
 
-This project rocks and uses MIT-LICENSE.
++acts_as_approvable+ is an ActiveRecord extension that allows you to flag models as pending 
+approval. One use of this would be so that changes would not show up in your views until the 
+model has been "approved".
+
+This is my very first attempt at creating a gem for Rails 3. I had a need to create "pending" 
+changes to models, so my solution was to follow the "acts_as" pattern and extend ActiveRecord 
+accordingly. Hopefully this code isn't overwhelmingly offensive to the Ruby elite.
+
+== Installation
+In +Gemfile+:
+
+	gem 'acts_as_approvable', :git => 'https://github.com/iamvery/acts_as_approvable.git'
+	
+In your application root, run:
+
+	$ bundle install
+	
+Generate the migration (will overwrite any table named +Approvals+):
+
+	$ rails g acts_as_approvable:install
+	
+== Usage
+Declare +acts_as_approvable+ on your models:
+
+	class Thing < ActiveRecord::Base
+		acts_as_approvable
+	end
+	
+Doing so will add the following methods to your model:
+
+* thing.pending?
+* thing.approved? 
+* thing.approve!
+* thing.disapprove!
+
+Both +pending?+ and +approved?+ exist as convenience methods. +approve!+ and +disapprove!+ 
+will modify the +Approval+ model that your +acts_as_approvable+ model has.
+
+== Compatibility
+This gem is designed to work with Rails 3. I will try to improve it over time as my infancy
+knowledge of Ruby and Rails grows.

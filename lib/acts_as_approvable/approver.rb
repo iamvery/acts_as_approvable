@@ -5,6 +5,7 @@ module ActsAsApprovable
     end
     
     module ClassMethods
+      # Creates associations with +Approvals+ and add instance methods for getting approval status
       def acts_as_approvable
         # don't allow multiple calls
         return if self.included_modules.include?(ActsAsApprovable::Approver::InstanceMethods)
