@@ -10,7 +10,13 @@ module ActsAsApprovable
         # don't allow multiple calls
         return if self.included_modules.include?(ActsAsApprovable::Approver::InstanceMethods)
         
+        # association with approval
         has_one :approval, :as => :approvable
+        
+        # access to all models that have been approved
+        named_scope :approved, :joins => :approval, :conditions => ['approvals.approved = ?', true]
+        
+        # make sure ever approvable model has an associated approval
         after_create :create_pending_approval
         
         include ActsAsApprovable::Approver::InstanceMethods
