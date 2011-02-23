@@ -1,5 +1,6 @@
 class Approval < ActiveRecord::Base
   belongs_to :approvable, :polymorphic => true
+  belongs_to :approver, :polymorphic => true
   
   validates :approvable_id, :approvable_type, :presence => true
   validates :approvable_id, :uniqueness => {:scope => :approvable_type}

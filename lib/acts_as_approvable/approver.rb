@@ -32,18 +32,24 @@ module ActsAsApprovable
         approval.approved?
       end
       
-      def approve!
+      def approve!(who)
         if pending?
           approval.approved = true
+          approval.approver = who || current_user || nil
           approval.save!
         end
       end
       
-      def disapprove!
+      def disapprove!(who)
         if approved?
           approval.approved = false
+          approval.approver = who || current_user || nil
           approval.save!
         end
+      end
+      
+      def approver
+        approval.approver
       end
       
       private
