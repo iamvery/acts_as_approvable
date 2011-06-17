@@ -7,7 +7,7 @@ rescue LoadError
 end
 
 require 'rake'
-require 'rake/rdoctask'
+require 'rdoc/task'
 
 require 'rake/testtask'
 
@@ -23,7 +23,7 @@ task :default => :test
 Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.rdoc_dir = 'rdoc'
   rdoc.title    = 'ActsAsApprovable'
-  rdoc.options << '--line-numbers' << '--inline-source'
+  rdoc.options << '--line-numbers'
   rdoc.rdoc_files.include('README.rdoc')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
