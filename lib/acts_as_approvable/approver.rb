@@ -25,14 +25,17 @@ module ActsAsApprovable
     
     module InstanceMethods      
       def pending?
+        create_pending_approval if approval.nil?
         !approval.approved?
       end
       
       def approved?
+        create_pending_approval if approval.nil?
         approval.approved?
       end
       
       def approve!(who)
+        create_pending_approval if approval.nil?
         if pending?
           approval.approved = true
           approval.approver = who || current_user || nil
@@ -41,6 +44,7 @@ module ActsAsApprovable
       end
       
       def disapprove!(who)
+        create_pending_approval if approval.nil?
         if approved?
           approval.approved = false
           approval.approver = who || current_user || nil
@@ -49,6 +53,7 @@ module ActsAsApprovable
       end
       
       def approver
+        create_pending_approval if approval.nil?
         approval.approver
       end
       
