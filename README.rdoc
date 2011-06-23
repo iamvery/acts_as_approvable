@@ -39,5 +39,5 @@ Both +pending?+ and +approved?+ exist as convenience methods. +approve!+ and +di
 will modify the +Approval+ model that your +acts_as_approvable+ model has.
 
 == Compatibility
-This gem is designed to work with Rails 3. I will try to improve it over time as my infancy
+This gem is designed to work with Rails 3.x. I will try to improve it over time as my infancy
 knowledge of Ruby and Rails grows.

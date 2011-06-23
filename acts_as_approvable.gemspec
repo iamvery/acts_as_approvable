@@ -5,5 +5,6 @@ Gem::Specification.new do |s|
   s.summary = "Make an ActiveRecord model approvable."
   s.description = "Make an ActiveRecord model approvable."
   s.files = Dir["lib/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
-  s.version = "0.0.1"
+  s.version = "0.0.3"
+  s.authors = ['Jay Hayes', 'Christoph Lupprich']
 end
