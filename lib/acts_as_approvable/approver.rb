@@ -14,7 +14,7 @@ module ActsAsApprovable
         has_one :approval, :as => :approvable
         
         # access to all models that have been approved
-        named_scope :approved, :joins => :approval, :conditions => ['approvals.approved = ?', true]
+        scope :approved, lambda { joins(:approval).where('approvals.approved' => true) }
         
         # make sure ever approvable model has an associated approval
         after_create :create_pending_approval
@@ -25,14 +25,17 @@ module ActsAsApprovable
     
     module InstanceMethods      
       def pending?
+        create_pending_approval if approval.nil?
         !approval.approved?
       end
       
       def approved?
+        create_pending_approval if approval.nil?
         approval.approved?
       end
       
       def approve!(who)
+        create_pending_approval if approval.nil?
         if pending?
           approval.approved = true
           approval.approver = who || current_user || nil
@@ -41,6 +44,7 @@ module ActsAsApprovable
       end
       
       def disapprove!(who)
+        create_pending_approval if approval.nil?
         if approved?
           approval.approved = false
           approval.approver = who || current_user || nil
@@ -49,6 +53,7 @@ module ActsAsApprovable
       end
       
       def approver
+        create_pending_approval if approval.nil?
         approval.approver
       end
       
