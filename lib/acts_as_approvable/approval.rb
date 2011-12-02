@@ -5,13 +5,8 @@ class Approval < ActiveRecord::Base
   validates :approvable_id, :approvable_type, :presence => true
   validates :approvable_id, :uniqueness => {:scope => :approvable_type}
   
-  # find all pending approvals
-  def self.pending
-    where :approved => false
-  end
-  
-  # find approvals from today
-  def self.approved_today
-    Approval.where( :approved => true ).all(:conditions => ['DATE(updated_at) = DATE(?)', Date.today])
-  end
+  # Scoped wrapped in lambdas because ActiveRecord's connection hasn't been established at the
+  # time of this classes' load.
+  scope :pending, lambda{ where(:approved => false) }
+  scope :approved_today, lambda{ where(:approved => true).where(arel_table[:updated_at].eq(Date.today)) }
 end

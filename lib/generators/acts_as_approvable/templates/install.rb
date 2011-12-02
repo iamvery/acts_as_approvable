@@ -10,6 +10,7 @@ class <%= migration_class_name %> < ActiveRecord::Migration
   end
 
   def self.down
+    remove_index :approvals, :column => [:approvable_id, :approvable_type]
     drop_table :approvals
   end
 end

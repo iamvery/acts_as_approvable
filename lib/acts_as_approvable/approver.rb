@@ -1,3 +1,5 @@
+require 'acts_as_approvable/approval'
+
 module ActsAsApprovable
   module Approver
     def self.included(base)
@@ -8,53 +10,42 @@ module ActsAsApprovable
       # Creates associations with +Approvals+ and add instance methods for getting approval status
       def acts_as_approvable
         # don't allow multiple calls
-        return if self.included_modules.include?(ActsAsApprovable::Approver::InstanceMethods)
+        return if included_modules.include?(ActsAsApprovable::Approver::InstanceMethods)
         
         # association with approval
         has_one :approval, :as => :approvable
         
         # access to all models that have been approved
-        scope :approved, lambda { joins(:approval).where('approvals.approved' => true) }
+        scope :approved, joins(:approval).where(Approval.arel_table[:approved].eq(true))
         
-        # make sure ever approvable model has an associated approval
+        # make sure every approvable model has an associated approval
         after_create :create_pending_approval
         
         include ActsAsApprovable::Approver::InstanceMethods
       end
     end
     
-    module InstanceMethods      
-      def pending?
-        create_pending_approval if approval.nil?
-        !approval.approved?
-      end
-      
+    module InstanceMethods
       def approved?
-        create_pending_approval if approval.nil?
-        approval.approved?
+        !!approval.try(:approved?)
       end
       
-      def approve!(who)
-        create_pending_approval if approval.nil?
-        if pending?
-          approval.approved = true
-          approval.approver = who || current_user || nil
-          approval.save!
-        end
+      def pending?
+        !approved?
       end
       
-      def disapprove!(who)
+      def approve!(who = nil)
         create_pending_approval if approval.nil?
-        if approved?
-          approval.approved = false
-          approval.approver = who || current_user || nil
-          approval.save!
-        end
+        approval.update_attributes :approved => true, :approver => who || nil if pending?
+      end
+      
+      def disapprove!(who = nil)
+        create_pending_approval if approval.nil?
+        approval.update_attributes :approved => false, :approver => who || nil if approved?
       end
       
       def approver
-        create_pending_approval if approval.nil?
-        approval.approver
+        approval.try :approver
       end
       
       private

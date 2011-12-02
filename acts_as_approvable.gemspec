@@ -1,10 +1,17 @@
-# Provide a simple gemspec so you can easily use your enginex
-# project in your rails apps through git.
+$:.unshift File.expand_path('..', __FILE__)
+require 'lib/acts_as_approvable/version'
+
 Gem::Specification.new do |s|
   s.name = "acts_as_approvable"
+  s.version = ActsAsApprovable::Version::STRING
   s.summary = "Make an ActiveRecord model approvable."
-  s.description = "Make an ActiveRecord model approvable."
-  s.files = Dir["lib/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
-  s.version = "0.0.3"
+  s.description = s.summary
+  s.homepage = 'https://github.com/iamvery/acts_as_approvable'
   s.authors = ['Jay Hayes', 'Christoph Lupprich']
+  
+  s.files = Dir["lib/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
+  s.test_files = Dir['spec/**/*']
+  
+  s.add_dependency 'rails', '~> 3'
+  s.add_development_dependency 'rake'
 end
