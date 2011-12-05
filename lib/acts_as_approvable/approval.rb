@@ -7,6 +7,6 @@ class Approval < ActiveRecord::Base
   
   # Scoped wrapped in lambdas because ActiveRecord's connection hasn't been established at the
   # time of this classes' load.
-  scope :pending, lambda{ where(:approved => false) }
-  scope :approved_today, lambda{ where(:approved => true).where(arel_table[:updated_at].eq(Date.today)) }
+  scope :pending, lambda{ where :approved => false  }
+  scope :approved_today, lambda{ where(:approved => true).where(['DATE(approvals.updated_at) = ?', Date.today]) }
 end
