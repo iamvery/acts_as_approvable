@@ -25,8 +25,10 @@ module ActsAsApprovable
         # association with approval
         has_one :approval, :as => :approvable, :dependent => :destroy
         
-        # access to all models that have been approved
-        scope :approved, lambda{ joins(:approval).where(Approval.arel_table[:approved].eq(true)) }
+        # access to all models that have the provided approval
+        scope :approved, lambda{ |approved = true| joins(:approval).where(Approval.arel_table[:approved].eq(approved)) }
+        # access to all models that are pending
+        scope :pending, approved(false)
         
         # make sure every new approvable model has an associated approval
         after_create :create_approval
